@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Layout</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: black;
+        color: white;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+
+    
+    .intro {
+        background-color: black;
+        max-width: 800px;
+        margin: auto;
+        text-align: center;
+        padding: 40px 20px;
+        animation: fadeUp 1s ease-out forwards;
+    }
+
+    .intro h1 {
+        font-size: 2.5rem;
+        color: #a020f0;
+        margin-bottom: 10px;
+        position: relative;
+        animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    .intro p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #ccc;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Glow animation */
+    @keyframes glowPulse {
+        0% {
+            text-shadow: 0 0 5px rgba(160, 32, 240, 0.6),
+                         0 0 10px rgba(160, 32, 240, 0.5),
+                         0 0 15px rgba(160, 32, 240, 0.4);
+        }
+        50% {
+            text-shadow: 0 0 10px rgba(160, 32, 240, 0.8),
+                         0 0 20px rgba(160, 32, 240, 0.6),
+                         0 0 30px rgba(160, 32, 240, 0.5);
+        }
+        100% {
+            text-shadow: 0 0 5px rgba(160, 32, 240, 0.6),
+                         0 0 10px rgba(160, 32, 240, 0.5),
+                         0 0 15px rgba(160, 32, 240, 0.4);
+        }
+    }
+
+  
+
+
+
+    /* Top Ribbon */
+    .top-ribbon {
+        position: absolute;
+        top: 20px;
+        left: -60px;
+        width: 220px;
+        background: linear-gradient(135deg, #a020f0, #8000c0);
+        text-align: center;
+        line-height: 35px;
+        letter-spacing: 1px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        transform: rotate(-45deg);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        z-index: 10;
+    }
+
+    .pos-relative{
+        position: relative;
+    }
+
+    .main-container {
+         position: relative;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 80px 20px 20px; /* top padding so ribbon doesn't overlap */
+    }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        flex: 1;
+    }
+
+    .card {
+        flex: 1;
+        min-width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+        padding: 20px;
+        animation: slideUp 0.8s ease forwards;
+    }
+
+    .card h2 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0 0 8px;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #ccc;
+        margin: 0 0 16px;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .illustrator-card {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .stat-item {
+        background: #101010;
+        padding: 15px;
+        border-radius: 10px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.3s ease;
+        text-align: center;
+    }
+
+    .stat-item i {
+        font-size: 28px;
+        color: #a020f0;
+        animation: bounce 2s infinite;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-item strong {
+        font-size: 20px;
+    }
+
+    .stat-item span {
+        font-size: 14px;
+        color: #ccc;
+    }
+
+    .stat-desc {
+        font-size: 13px;
+        color: #999;
+    }
+
+    
+
+    /* Animations */
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-8px); }
+        60% { transform: translateY(-4px); }
+    }
+
+      @media (max-width: 768px) {
+        .intro h1 {
+            font-size: 2rem;
+        }
+        .intro p {
+            font-size: 1rem;
+        }
+    }
+
+</style>
+
+<style>
+.analytics-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+.section-title {
+    font-size: 2rem;
+    text-align: center;
+    margin: 40px 0 30px;
+    font-weight: 700;
+}
+
+.before-title {
+    color: #aaa;
+}
+
+.after-title {
+    color: #c084fc;
+}
+
+.month-pair {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 60px;
+}
+
+.month-card {
+    flex: 1 1 calc(50% - 15px);
+    min-width: 300px;
+    padding: 25px;
+    border-radius: 14px;
+    background: #141414;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.month-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.month-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 6px 0;
+}
+
+.before-card {
+    border: 1px solid #444;
+}
+
+.after-card {
+    border: 1px solid rgba(192, 132, 252, 0.7);
+    background: linear-gradient(145deg, #1a001f, #120012);
+}
+
+.month-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .month-pair {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .month-card {
+        flex: 1 1 100%;
+    }
+}
+</style>
+
+
+<style>
+/* Section Styling */
+.video-section-wrapper {
+    background: #000;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.section-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 60px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #9b4dff, transparent);
+    margin: 10px auto 0;
+    border-radius: 2px;
+    animation: glowFlow 2s linear infinite;
+}
+
+/* Video Section (inside wrapper) */
+.video-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px; /* More spacing */
+    flex-wrap: wrap;
+    position: relative;
+}
+
+/* Timeline - only between the two images */
+.timeline {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 6px;
+    width: calc(100% - 650px); /* Only the gap between two images */
+    background: rgba(155, 77, 255, 0.15);
+    z-index: 0;
+    animation: fadeIn 1s ease-out;
+}
+
+.timeline-progress {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, #9b4dff, transparent);
+    background-size: 200% 100%;
+    animation: glowFlow 2s linear infinite;
+    box-shadow: 0 0 15px #9b4dff;
+}
+
+/* Flowing glow animation */
+@keyframes glowFlow {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-50%) scaleX(0.5); }
+    to { opacity: 1; transform: translateY(-50%) scaleX(1); }
+}
+
+/* Wrapper for each image */
+.video-wrapper {
+    position: relative;
+    width: 300px;
+    height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    transform: rotate(-2deg);
+    animation: glowBorder 3s linear infinite;
+    border: 3px solid #9b4dff;
+    box-shadow: 0 0 20px rgba(155, 77, 255, 0.6);
+    z-index: 1;
+}
+
+/* Glowing border animation */
+@keyframes glowBorder {
+    0% { box-shadow: 0 0 15px #9b4dff, inset 0 0 10px #9b4dff; }
+    50% { box-shadow: 0 0 30px #b17fff, inset 0 0 20px #b17fff; }
+    100% { box-shadow: 0 0 15px #9b4dff, inset 0 0 10px #9b4dff; }
+}
+
+/* Image styles */
+.video-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.video-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+/* Text description on top */
+.video-text-top {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 14px;
+    border-radius: 8px;
+}
+
+/* Text description on bottom */
+.video-text-bottom {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 90%;
+}
+
+/* Play button styling */
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #9b4dff;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(155, 77, 255, 0.8);
+}
+
+.play-btn:hover {
+    background: #b17fff;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .video-section {
+        flex-direction: column;
+        padding: 40px 10px;
+        gap: 60px;
+    }
+
+    /* Timeline becomes vertical between stacked videos */
+    .timeline {
+        position: absolute;
+        left: 50%;
+        top: calc(50% - 250px);
+        width: 6px;
+        height: calc(100% - 550px);
+        transform: translateX(-50%);
+    }
+
+    .timeline-progress {
+        background: linear-gradient(180deg, transparent, #9b4dff, transparent);
+        background-size: 100% 200%;
+        animation: glowFlowVertical 2s linear infinite;
+    }
+
+    @keyframes glowFlowVertical {
+        0% { background-position: 0 200%; }
+        100% { background-position: 0 -200%; }
+    }
+
+    .video-wrapper {
+        width: 90%;
+        height: 400px;
+        transform: rotate(0deg);
+    }
+}
+</style>
+
+
+<style>
+  :root{
+    --insta-grad: linear-gradient(90deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%);
+    --bg: #0f1720;
+    --btn-radius: 14px;
+    --btn-padding: 14px 22px;
+    --shadow: 0 6px 18px rgba(20,20,20,0.45);
+    --text: #ffffff;
+    --focus-ring: rgba(255,255,255,0.18);
+  }
+
+  .instbtn{
+    margin:200px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family: sans-serif;
+    background-color: black;
+  }
+
+  a.insta-btn{
+    display:inline-grid;
+    grid-auto-flow:column;
+    gap:12px;
+    align-items:center;
+    place-content:center;
+    background: var(--insta-grad);
+    color:var(--text);
+    padding:var(--btn-padding);
+    border-radius:var(--btn-radius);
+    box-shadow: var(--shadow);
+    font-weight:600;
+    font-size:16px;
+    line-height:1;
+    text-decoration:none;
+    position:relative;
+    overflow:hidden;
+    transition: transform .12s cubic-bezier(.2,.9,.2,1), box-shadow .12s ease;
+  }
+
+  .insta-btn .icon{
+    display:inline-grid;
+    place-items:center;
+    width:36px;
+    height:36px;
+    background: rgba(255,255,255,0.12);
+    border-radius:10px;
+  }
+
+  .insta-btn:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(15,20,30,0.6);
+  }
+  .insta-btn:active{
+    transform: translateY(-1px) scale(.995);
+  }
+
+  .insta-btn:focus{
+    outline: none;
+    box-shadow: 0 10px 28px rgba(15,20,30,0.7), 0 0 0 6px var(--focus-ring);
+  }
+
+  .ripple {
+    position:absolute;
+    border-radius:50%;
+    transform: scale(0);
+    background: rgba(255,255,255,0.26);
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+    <!-- Intro Section -->
+<section class="intro">
+    <h1>Performance Overview <span style="color:#a020f0; font-weight:bold;"></span>Instagram</h1>
+    <p>
+        This dashboard delivers a clear and concise view of our latest performance trends.  
+        The visualizations   below provide actionable insights, highlighting overall engagement growth  
+       s.
+        
+    </p>
+</section>
+
+
+
+<div class="main-container">
+    <!-- Top Ribbon -->
+<div class="top-ribbon">BEFORE</div>
+
+
+   <div class="pos-relative">
+
+
+
+     <!-- SECTION 1 -->
+    <div class="container">
+        <div class="card">
+            <h2>April</h2>
+            <p></p>
+            <div class="chart-container">
+                <canvas id="chart1"></canvas>
+            </div>
+        </div>
+
+        <div class="card illustrator-card">
+            <div class="stat-item">
+                <i class="fas fa-video"></i>
+                <strong>6.9K</strong>
+                <span>Reels & Post Views</span>
+                
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <strong>71%</strong>
+                <span>Views from Non-Followers</span>
+                
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-plus"></i>
+                <strong>1.2K</strong>
+                <span>Followers</span>
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="container">
+        <div class="card">
+            <h2>May</h2>
+            <p></p>
+            <div class="chart-container">
+                
+                <canvas id="chart2"></canvas>
+            </div>
+        </div>
+
+        <div class="card illustrator-card">
+            <div class="stat-item">
+                <i class="fas fa-video"></i>
+                <strong>4.2K</strong>
+                <span>Reels & Post Views</span>
+               
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <strong>53%</strong>
+                <span>Views from Non-Followers</span>
+               
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-plus"></i>
+                <strong>1.2K</strong>
+                <span>Followers</span>
+                
+            </div>
+        </div>
+    </div>
+   </div>
+
+</div>
+
+<section class="analytics-container">
+
+    <!-- BEFORE MANAGEMENT -->
+    <h2 class="section-title before-title"><i class="fa-solid fa-clock-rotate-left"></i> Before Management (April & May) </h2>
+    <div class="month-pair">
+        
+        <!-- April -->
+        <div class="month-card before-card">
+            <h3>April</h3>
+            <p><strong>Views:</strong>
+            <ul>
+                <li>
+                     6.9K  Content was posted without a structured strategy, relying on organic reach. Engagement happened naturally but without targeted optimization.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Non-Followers:</strong> 
+            <ul>
+                <li>
+                    71%  Majority of views came from outside the follower base, showing organic discoverability.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Followers:</strong> 
+            <ul>
+                <li>
+                    1.2K  Audience size remained steady, with no significant growth activity.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+        <!-- May -->
+        <div class="month-card before-card">
+            <h3>May</h3>
+            <p><strong>Views:</strong>
+            <ul>
+                <li>
+                     4.2K With no active management, activity slowed slightly compared to April. Engagement came mostly from loyal viewers.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Non-Followers:</strong>
+            <ul>
+                <li>
+                     53%  Attracted fewer outside viewers compared to April.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Followers:</strong> 
+            <ul>
+                <li>
+                    1.2K Follower count held steady without active growth efforts.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+    </div>
+
+   
+
+</section>
+
+
+
+
+
+<div class="main-container">
+    <!-- Top Ribbon -->
+<div class="top-ribbon">AFTER</div>
+
+
+   <div class="pos-relative">
+
+
+
+     <!-- SECTION 1 -->
+    <div class="container">
+        
+
+        <div class="card illustrator-card">
+            <div class="stat-item">
+                <i class="fas fa-video"></i>
+                <strong>36K</strong>
+                <span>Reels & Post Views</span>
+                
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <strong>72%</strong>
+                <span>Views from Non-Followers</span>
+                
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-plus"></i>
+                <strong>1.3K</strong>
+                <span>Followers</span>
+               
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h2>June</h2>
+            <p></p>
+            <div class="chart-container">
+                <canvas id="chart3"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="container">
+        
+
+        <div class="card illustrator-card">
+            <div class="stat-item">
+                <i class="fas fa-video"></i>
+                <strong>84K</strong>
+                <span>Reels & Post Views</span>
+               
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-users"></i>
+                <strong>62%</strong>
+                <span>Views from Non-Followers</span>
+               
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-user-plus"></i>
+                <strong>2.1K</strong>
+                <span>Followers</span>
+                
+            </div>
+        </div>
+
+
+        <div class="card">
+            <h2>July</h2>
+            <p></p>
+            <div class="chart-container">
+                
+                <canvas id="chart4"></canvas>
+            </div>
+        </div>
+    </div>
+   </div>
+
+</div>
+
+
+<section class="analytics-container">
+
+   
+
+    <!-- AFTER MANAGEMENT -->
+    <h2 class="section-title after-title"><i class="fa-solid fa-rocket"></i>After Management (June & July) </h2>
+    <div class="month-pair">
+        
+        <!-- June -->
+        <div class="month-card after-card">
+            <h3>June</h3>
+            <p><strong>Views</strong>
+             <ul>
+                    <li> 36K Strategic posting, targeted campaigns, and consistent engagement massively boosted reach and audience activity.</li>
+            </ul>
+        </p>
+            <p><strong>Non-Followers:</strong> 
+                <ul>
+                    <li>
+                        72% Majority of reach came from new viewers, expanding brand visibility.
+                    </li>
+                </ul>
+            </p>
+            <p><strong>Followers:</strong> 
+            <ul>
+                <li>
+                    1.3K Noticeable increase in followers due to improved engagement strategies.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+        <!-- July -->
+        <div class="month-card after-card">
+            <h3>July</h3>
+            <p><strong>Views:</strong> 
+            <ul>
+                <li>
+                    84K :Peak performance month with optimized content timing, trending topics, and frequent posting.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Non-Followers:</strong>
+            <ul>
+                <li>
+                     62% :Continued to attract high levels of fresh audiences.
+                </li>
+            </ul>
+            </p>
+            <p><strong>Followers:</strong> 
+            <ul>
+                <li>
+                    2.1K : Strong follower growth, marking July as a milestone month.
+                </li>
+            </ul>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="video-section-wrapper">
+    <h2 class="section-title">Videos Got Most Attention</h2>
+    <div class="video-section">
+        <!-- Timeline -->
+        <div class="timeline">
+            <div class="timeline-progress"></div>
+        </div>
+
+        <!-- First Video -->
+        <div class="video-wrapper">
+            <div class="video-text-top"></div>
+            <img src="./images/photo_2025-08-10_15-13-20.jpg" >
+            <a href="https://www.instagram.com/reel/DL1olZvsgI_/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="play-btn" target="_blank">
+                <i class="fas fa-play"></i>
+            </a>
+            <div class="video-text-bottom"></div>
+        </div>
+
+        <!-- Second Video -->
+        <div class="video-wrapper">
+            <div class="video-text-top"></div>
+            <img src="./images/dan the.jpg" >
+            <a href="https://www.instagram.com/reel/DNJOrS_MDma/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="play-btn" target="_blank">
+                <i class="fas fa-play"></i>
+            </a>
+            <div class="video-text-bottom"></div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="instbtn">
+
+    <a href="./tiktok.html"  class="insta-btn" id="instaLink">
+  <span class="icon" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="rgba(255,255,255,0.92)" stroke-width="1.2" fill="none"/>
+      <circle cx="12" cy="12" r="3.2" stroke="rgba(255,255,255,0.92)" stroke-width="1.2" fill="none"/>
+      <circle cx="17.2" cy="6.8" r="0.9" fill="rgba(255,255,255,0.92)"/>
+    </svg>
+  </span>
+  <span class="label">Click Here For TikTok </span>
+</a>
+
+</div>
+
+
+
+
+
+<script>
+  const link = document.getElementById('instaLink');
+
+  function createRipple(x, y){
+    const rect = link.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const size = Math.max(rect.width, rect.height) * 1.4;
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (x - rect.left - size/2) + 'px';
+    ripple.style.top  = (y - rect.top  - size/2) + 'px';
+    link.appendChild(ripple);
+
+    requestAnimationFrame(()=>{
+      ripple.style.transition = 'transform 520ms cubic-bezier(.2,.9,.2,1), opacity 520ms ease';
+      ripple.style.transform = 'scale(1)';
+      ripple.style.opacity = '0';
+    });
+
+    setTimeout(()=> ripple.remove(), 600);
+  }
+
+  link.addEventListener('click', function(e){
+    const p = e;
+    createRipple(p.clientX, p.clientY);
+  });
+</script>
+
+<script>
+    // shared config generator to keep look consistent
+    function makeOptions(max) {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: '#fff' } },
+                y: {
+                    min: 0,
+                    max: max,
+                    ticks: {
+                        color: '#fff',
+                        stepSize: max / 4,
+                        callback: function(v) {
+                            if (v === 0) return '0';
+                            return (v >= 1000) ? (v / 1000) + 'K' : v;
+                        }
+                    },
+                    grid: { display: false }
+                }
+            }
+        };
+    }
+
+    // Chart 1 (April) - unchanged
+    new Chart(document.getElementById('chart1').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+                label: 'Views',
+                data: [800, 1500, 3000, 6900],
+                borderColor: '#a020f0',
+                backgroundColor: 'rgba(160, 32, 240, 0.18)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#a020f0',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: makeOptions(10000)
+    });
+
+    // Chart 2 (May) - unchanged
+    new Chart(document.getElementById('chart2').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+                label: 'Views',
+                data: [900, 1600, 2800, 4200],
+                borderColor: '#a020f0',
+                backgroundColor: 'rgba(160, 32, 240, 0.18)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#a020f0',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: makeOptions(5000)
+    });
+
+    // Chart 3 (June) -> final point = 36,000
+    // Example weekly progression: 6K -> 12K -> 24K -> 36K
+    new Chart(document.getElementById('chart3').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+                label: 'Views',
+                data: [6000, 12000, 24000, 36000],
+                borderColor: '#a020f0',
+                backgroundColor: 'rgba(160, 32, 240, 0.18)',
+                fill: true,
+                tension: 0.38,
+                pointBackgroundColor: '#a020f0',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: makeOptions(40000)
+    });
+
+    // Chart 4 (July) -> final point = 84,000
+    // Example weekly progression: 15K -> 35K -> 60K -> 84K
+    new Chart(document.getElementById('chart4').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+                label: 'Views',
+                data: [15000, 35000, 60000, 84000],
+                borderColor: '#a020f0',
+                backgroundColor: 'rgba(160, 32, 240, 0.18)',
+                fill: true,
+                tension: 0.38,
+                pointBackgroundColor: '#a020f0',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: makeOptions(90000)
+    });
+</script>
+
+</body>
+</html>

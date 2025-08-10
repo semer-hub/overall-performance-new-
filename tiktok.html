@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Analytics Layout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        .intro {
+            background-color: black;
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeUp 1s ease-out forwards;
+        }
+        
+        .intro h1 {
+            font-size: 2.5rem;
+            color: #FF0050;
+            margin-bottom: 10px;
+            position: relative;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        
+        .intro p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        
+        /* Fade-in animation */
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Glow animation with TikTok colors */
+        @keyframes glowPulse {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 0, 80, 0.6),
+                             0 0 10px rgba(255, 0, 80, 0.5),
+                             0 0 15px rgba(255, 0, 80, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 10px rgba(255, 0, 80, 0.8),
+                             0 0 20px rgba(255, 0, 80, 0.6),
+                             0 0 30px rgba(37, 244, 238, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(255, 0, 80, 0.6),
+                             0 0 10px rgba(255, 0, 80, 0.5),
+                             0 0 15px rgba(255, 0, 80, 0.4);
+            }
+        }
+        
+        /* Top Ribbon */
+        .top-ribbon {
+            position: absolute;
+            top: 20px;
+            left: -60px;
+            width: 220px;
+            background: linear-gradient(135deg, #FF0050, #25F4EE);
+            text-align: center;
+            line-height: 35px;
+            letter-spacing: 1px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        .pos-relative {
+            position: relative;
+        }
+        
+        .main-container {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 80px 20px 20px;
+        }
+        
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .card {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+            padding: 20px;
+            animation: slideUp 0.8s ease forwards;
+        }
+        
+        .card h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 8px;
+        }
+        
+        .card p {
+            font-size: 14px;
+            color: #ccc;
+            margin: 0 0 16px;
+        }
+        
+        .chart-container {
+            height: 250px;
+        }
+        
+        .illustrator-card {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: #101010;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 80, 0.3);
+        }
+        
+        .stat-item i {
+            font-size: 28px;
+            color: #FF0050;
+            animation: bounce 2s infinite;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(37, 244, 238, 0.4);
+        }
+        
+        .stat-item strong {
+            font-size: 20px;
+            color: #25F4EE;
+        }
+        
+        .stat-item span {
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        .stat-desc {
+            font-size: 13px;
+            color: #999;
+        }
+        
+        /* Animations */
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+        
+        @media (max-width: 768px) {
+            .intro h1 {
+                font-size: 2rem;
+            }
+            .intro p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Analytics Container Styles */
+        .analytics-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 60px 20px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin: 40px 0 30px;
+            font-weight: 700;
+        }
+        
+        .before-title {
+            color: #aaa;
+        }
+        
+        .after-title {
+            color: #25F4EE;
+        }
+        
+        .month-pair {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 60px;
+        }
+        
+        .month-card {
+            flex: 1 1 calc(50% - 15px);
+            min-width: 300px;
+            padding: 25px;
+            border-radius: 14px;
+            background: #141414;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .month-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .month-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 6px 0;
+        }
+        
+        .before-card {
+            border: 1px solid #444;
+        }
+        
+        .after-card {
+            border: 1px solid rgba(37, 244, 238, 0.7);
+            background: linear-gradient(145deg, #001a1f, #001212);
+        }
+        
+        .month-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(37, 244, 238, 0.3);
+        }
+        
+        /* Video Section Styles */
+        .video-section-wrapper {
+            background: #000;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #FF0050, #25F4EE, transparent);
+            margin: 10px auto 0;
+            border-radius: 2px;
+            animation: glowFlow 2s linear infinite;
+        }
+        
+        .video-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 100px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .timeline {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 6px;
+            width: calc(100% - 650px);
+            background: rgba(255, 0, 80, 0.15);
+            z-index: 0;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .timeline-progress {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #FF0050, #25F4EE, transparent);
+            background-size: 200% 100%;
+            animation: glowFlow 2s linear infinite;
+            box-shadow: 0 0 15px #FF0050;
+        }
+        
+        @keyframes glowFlow {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-50%) scaleX(0.5); }
+            to { opacity: 1; transform: translateY(-50%) scaleX(1); }
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            transform: rotate(-2deg);
+            animation: glowBorder 3s linear infinite;
+            border: 3px solid #FF0050;
+            box-shadow: 0 0 20px rgba(255, 0, 80, 0.6);
+            z-index: 1;
+        }
+        
+        @keyframes glowBorder {
+            0% { 
+                box-shadow: 0 0 15px #FF0050, inset 0 0 10px #FF0050;
+                border-color: #FF0050;
+            }
+            50% { 
+                box-shadow: 0 0 30px #25F4EE, inset 0 0 20px #25F4EE;
+                border-color: #25F4EE;
+            }
+            100% { 
+                box-shadow: 0 0 15px #FF0050, inset 0 0 10px #FF0050;
+                border-color: #FF0050;
+            }
+        }
+        
+        .video-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        
+        .video-wrapper:hover img {
+            transform: scale(1.05);
+        }
+        
+        .video-text-top {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 14px;
+            border-radius: 8px;
+        }
+        
+        .video-text-bottom {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 0.95rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 90%;
+        }
+        
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #FF0050, #25F4EE);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 80, 0.8);
+        }
+        
+        .play-btn:hover {
+            background: linear-gradient(45deg, #25F4EE, #FF0050);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .month-pair {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .month-card {
+                flex: 1 1 100%;
+            }
+            .video-section {
+                flex-direction: column;
+                padding: 40px 10px;
+                gap: 60px;
+            }
+            .timeline {
+                position: absolute;
+                left: 50%;
+                top: calc(50% - 250px);
+                width: 6px;
+                height: calc(100% - 550px);
+                transform: translateX(-50%);
+            }
+            .timeline-progress {
+                background: linear-gradient(180deg, transparent, #FF0050, #25F4EE, transparent);
+                background-size: 100% 200%;
+                animation: glowFlowVertical 2s linear infinite;
+            }
+            @keyframes glowFlowVertical {
+                0% { background-position: 0 200%; }
+                100% { background-position: 0 -200%; }
+            }
+            .video-wrapper {
+                width: 90%;
+                height: 400px;
+                transform: rotate(0deg);
+            }
+
+           
+        }
+    </style>
+
+    <style>
+
+       
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000; /* Deep black */
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    .analytics-section {
+        width: 100%;
+        background-color: #000;
+        padding: 20px;
+        box-sizing: border-box;
+        border-bottom: 2px solid #111;
+    }
+    h2 {
+        margin-top: 0;
+        font-size: 1.4rem;
+        border-bottom: 2px solid #1f1f1f;
+        padding-bottom: 10px;
+    }
+    .metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 15px;
+    }
+    .card {
+        background-color: #0d0d0d;
+        border-radius: 12px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .card-title {
+        font-size: 0.85rem;
+        color: #aaa;
+    }
+    .card-value {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+    .card-change {
+        font-size: 0.8rem;
+        color: #00f2ea; /* TikTok cyan */
+    }
+    .card-change.down {
+        color: #ff0050; /* TikTok pink */
+    }
+    canvas {
+        margin-top: 20px;
+        background-color: #0d0d0d;
+        border-radius: 12px;
+        padding: 10px;
+    }
+    .breakdown {
+        margin-top: 20px;
+        background-color: #0d0d0d;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .breakdown h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        border-bottom: 1px solid #1f1f1f;
+        padding-bottom: 5px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    th, td {
+        text-align: left;
+        padding: 8px;
+        border-bottom: 1px solid #1f1f1f;
+    }
+    th {
+        color: #ccc;
+    }
+    td {
+        color: #fff;
+    }
+    .positive {
+        color: #00f2ea;
+    }
+    .negative {
+        color: #ff0050;
+    }
+
+    
+</style>
+</head>
+<body>
+   
+
+    <div class="main-container" style="display: none;">
+        <!-- Top Ribbon -->
+       
+        <div class="pos-relative">
+            <!-- SECTION 1 -->
+            <div class="container">
+                <div class="card">
+                    <h2>April</h2>
+                    <p></p>
+                    <div class="chart-container">
+                        <canvas id="chart1"></canvas>
+                    </div>
+                </div>
+                <div class="card illustrator-card">
+                    <div class="stat-item">
+                        <i class="fas fa-video"></i>
+                        <strong>6.9K</strong>
+                        <span>Reels & Post Views</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <strong>71%</strong>
+                        <span>Views from Non-Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-plus"></i>
+                        <strong>1.2K</strong>
+                        <span>Followers</span>
+                    </div>
+                </div>
+            </div>
+            <!-- SECTION 2 -->
+            <div class="container">
+                <div class="card">
+                    <h2>May</h2>
+                    <p></p>
+                    <div class="chart-container">
+                        <canvas id="chart2"></canvas>
+                    </div>
+                </div>
+                <div class="card illustrator-card">
+                    <div class="stat-item">
+                        <i class="fas fa-video"></i>
+                        <strong>4.2K</strong>
+                        <span>Reels & Post Views</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <strong>53%</strong>
+                        <span>Views from Non-Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-plus"></i>
+                        <strong>1.2K</strong>
+                        <span>Followers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="analytics-container">
+        <!-- BEFORE MANAGEMENT -->
+        <h2 class="section-title before-title">Performance Overview <span style="color:#FF0050; font-weight:bold;"></span>TikTok</h2>
+        <div class="month-pair">
+            <!-- April -->
+            <div class="month-card before-card">
+                <h3>28-Day Performance (Jul 12 – Aug 8)</h3>
+                <p><strong>Post Views: </strong>
+                <ul>
+                    <li>
+                        382,000 views (+169%). For a brand-new account,
+                          that’s explosive visibility, pulling in more eyes than many established pages.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Profile Visits:  </strong>
+                <ul>
+                    <li>
+                        9,113 visits +4,815 (+112%). Thousands of people actively clicked to learn more about 
+                        us, a huge trust signal for such an early stage.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Likes: </strong>
+                <ul>
+                    <li>
+                        20,000 likes  up 12,000 (+164%). our content is not only reaching people but resonating strongly.
+                    </li>
+                </ul>
+                </p>
+            </div>
+            <!-- May -->
+            <div class="month-card before-card">
+                <h3></h3>
+                <p><strong>Comments:</strong>
+                <ul>
+                    <li>
+                         156 comments -303 (-66%). While conversations dipped, the engagement
+                          shifted toward quick reactions and shares typical for viral-style content.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Shares: </strong>
+                <ul>
+                    <li>
+                         3,904 shares up 2,025 (+108%). People are helping spread
+                          our content, essentially acting as unpaid promoters.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Momentum: </strong>
+                <ul>
+                    <li>
+                        The month started slow, but early August brought a viral lift-off,
+                         turning steady growth into a spike.
+                    </li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="main-container" style="display: none;">
+        <!-- Top Ribbon -->
+        <div class="top-ribbon">AFTER</div>
+        <div class="pos-relative">
+            <!-- SECTION 1 -->
+            <div class="container">
+                <div class="card illustrator-card">
+                    <div class="stat-item">
+                        <i class="fas fa-video"></i>
+                        <strong>36K</strong>
+                        <span>Reels & Post Views</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <strong>72%</strong>
+                        <span>Views from Non-Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-plus"></i>
+                        <strong>1.3K</strong>
+                        <span>Followers</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>June</h2>
+                    <p></p>
+                    <div class="chart-container">
+                        <canvas id="chart3"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- SECTION 2 -->
+            <div class="container">
+                <div class="card illustrator-card">
+                    <div class="stat-item">
+                        <i class="fas fa-video"></i>
+                        <strong>84K</strong>
+                        <span>Reels & Post Views</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <strong>62%</strong>
+                        <span>Views from Non-Followers</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-user-plus"></i>
+                        <strong>2.1K</strong>
+                        <span>Followers</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>July</h2>
+                    <p></p>
+                    <div class="chart-container">
+                        <canvas id="chart4"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 28 Days Analytics -->
+<div class="analytics-section">
+    <h2>28 Days (Jul 12 - Aug 8)</h2>
+    <div class="metrics"  style="display: none;" >
+        <div class="card"><div class="card-title">Post views</div><div class="card-value">382K</div><div class="card-change">+240K (+169.2%)</div></div>
+        <div class="card"><div class="card-title">Profile views</div><div class="card-value">9,113</div><div class="card-change">+4,815 (+112%)</div></div>
+        <div class="card"><div class="card-title">Likes</div><div class="card-value">20K</div><div class="card-change">+12K (+163.9%)</div></div>
+        <div class="card"><div class="card-title">Comments</div><div class="card-value">156</div><div class="card-change down">-303 (-66%)</div></div>
+        <div class="card"><div class="card-title">Shares</div><div class="card-value">3,904</div><div class="card-change">+2,025 (+107.8%)</div></div>
+        <div class="card"><div class="card-title">Est. rewards</div><div class="card-value">$0.00</div><div class="card-change">+$0.00</div></div>
+    </div>
+    <canvas id="chart28" width="400" height="150"></canvas>
+
+    <div class="breakdown">
+        <h3>Detailed Breakdown</h3>
+        <table>
+            <tr><th>Metric</th><th>Value</th><th>Change</th></tr>
+            <tr><td>Post views</td><td>382,000</td><td class="positive">+240,000 (+169.2%)</td></tr>
+            <tr><td>Profile views</td><td>9,113</td><td class="positive">+4,815 (+112%)</td></tr>
+            <tr><td>Likes</td><td>20,000</td><td class="positive">+12,000 (+163.9%)</td></tr>
+            <tr><td>Comments</td><td>156</td><td class="negative">-303 (-66%)</td></tr>
+            <tr><td>Shares</td><td>3,904</td><td class="positive">+2,025 (+107.8%)</td></tr>
+            <tr><td>Estimated Rewards</td><td>$0.00</td><td class="positive">+$0.00</td></tr>
+        </table>
+    </div>
+</div>
+
+
+<section class="analytics-container">
+        <!-- AFTER MANAGEMENT -->
+        <h2 class="section-title after-title"><i class="fa-solid fa-rocket"></i></h2>
+        <div class="month-pair">
+            <!-- June -->
+            <div class="month-card after-card">
+                <h3> 60-Day Performance (Jun 10 - Aug 8)</h3>
+
+
+                <p><strong>Post Views:</strong>
+                <ul>
+                    <li>
+                         527,000 views all of these came within the last two months,
+                          meaning over half a million people discovered our brand from scratch.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Profile Visits:</strong>
+                <ul>
+                    <li>
+                      13,000 visits  every single one is new traffic, an impressive pull for a fresh account.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Likes:</strong>
+                <ul>
+                    <li>
+                       28,000 likes  a powerful early indicator that our content style connects with viewers.
+                    </li>
+                </ul>
+                </p>
+            </div>
+            <!-- July -->
+            <div class="month-card after-card">
+                <h3></h3>
+                <p><strong>Comments: </strong>
+                <ul>
+                    <li>
+                     629 comments strong interaction for a profile that just entered the scene.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Shares:</strong>
+                <ul>
+                    <li>
+                       5,945 shares each share introducing our content to potentially hundreds more.
+                    </li>
+                </ul>
+                </p>
+                <p><strong>Momentum:</strong>
+                <ul>
+                    <li>
+                        A few small bumps early on, but the real breakthrough happened in early August, with one or two posts likely triggering viral reach.
+                    </li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </section>
+<!-- 60 Days Analytics -->
+<div class="analytics-section">
+    <h2></h2>
+    <div class="metrics"  style="display: none;">
+        <div class="card"><div class="card-title">Post views</div><div class="card-value">527K</div><div class="card-change">+527K</div></div>
+        <div class="card"><div class="card-title">Profile views</div><div class="card-value">13K</div><div class="card-change">+13K</div></div>
+        <div class="card"><div class="card-title">Likes</div><div class="card-value">28K</div><div class="card-change">+28K</div></div>
+        <div class="card"><div class="card-title">Comments</div><div class="card-value">629</div><div class="card-change">+629</div></div>
+        <div class="card"><div class="card-title">Shares</div><div class="card-value">5,945</div><div class="card-change">+5,945</div></div>
+        <div class="card"><div class="card-title">Est. rewards</div><div class="card-value">$0.00</div><div class="card-change">+$0.00</div></div>
+    </div>
+    <canvas id="chart60" width="400" height="150"></canvas>
+
+    <div class="breakdown">
+        <h3>Detailed Breakdown</h3>
+        <table>
+            <tr><th>Metric</th><th>Value</th><th>Change</th></tr>
+            <tr><td>Post views</td><td>527,000</td><td class="positive">+527,000</td></tr>
+            <tr><td>Profile views</td><td>13,000</td><td class="positive">+13,000</td></tr>
+            <tr><td>Likes</td><td>28,000</td><td class="positive">+28,000</td></tr>
+            <tr><td>Comments</td><td>629</td><td class="positive">+629</td></tr>
+            <tr><td>Shares</td><td>5,945</td><td class="positive">+5,945</td></tr>
+            <tr><td>Estimated Rewards</td><td>$0.00</td><td class="positive">+$0.00</td></tr>
+        </table>
+    </div>
+</div>
+
+
+
+    
+
+    <section class="video-section-wrapper">
+        <h2 class="section-title">Videos Got Most Attention</h2>
+        <div class="video-section">
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="timeline-progress"></div>
+            </div>
+            <!-- First Video -->
+            <div class="video-wrapper">
+                <div class="video-text-top"></div>
+                <img src="./images/the main ex.jpg">
+                <a href="https://www.tiktok.com/@exclusiverestaurant_/video/7522166995425529093?is_from_webapp=1&sender_device=pc&web_id=7521837150871848453" class="play-btn" target="_blank">
+                    <i class="fas fa-play"></i>
+                </a>
+                <div class="video-text-bottom"></div>
+            </div>
+            <!-- Second Video -->
+            <div class="video-wrapper">
+                <div class="video-text-top"></div>
+                <img src="./images/dan the.jpg">
+                <a href="https://www.tiktok.com/@exclusiverestaurant_/video/7535892346446138629?is_from_webapp=1&sender_device=pc&web_id=7521837150871848453" class="play-btn" target="_blank">
+                    <i class="fas fa-play"></i>
+                </a>
+                <div class="video-text-bottom"></div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Shared config generator with TikTok colors
+        function makeOptions(max) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#fff' } },
+                    y: {
+                        min: 0,
+                        max: max,
+                        ticks: {
+                            color: '#fff',
+                            stepSize: max / 4,
+                            callback: function(v) {
+                                if (v === 0) return '0';
+                                return (v >= 1000) ? (v / 1000) + 'K' : v;
+                            }
+                        },
+                        grid: { display: false }
+                    }
+                }
+            };
+        }
+
+        // Chart 1 (April) - TikTok pink theme
+        new Chart(document.getElementById('chart1').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Views',
+                    data: [800, 1500, 3000, 6900],
+                    borderColor: '#FF0050',
+                    backgroundColor: 'rgba(255, 0, 80, 0.18)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#FF0050',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: makeOptions(10000)
+        });
+
+        // Chart 2 (May) - TikTok pink theme
+        new Chart(document.getElementById('chart2').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Views',
+                    data: [900, 1600, 2800, 4200],
+                    borderColor: '#FF0050',
+                    backgroundColor: 'rgba(255, 0, 80, 0.18)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#FF0050',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: makeOptions(5000)
+        });
+
+        // Chart 3 (June) - TikTok cyan theme
+        new Chart(document.getElementById('chart3').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Views',
+                    data: [6000, 12000, 24000, 36000],
+                    borderColor: '#25F4EE',
+                    backgroundColor: 'rgba(37, 244, 238, 0.18)',
+                    fill: true,
+                    tension: 0.38,
+                    pointBackgroundColor: '#25F4EE',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: makeOptions(40000)
+        });
+
+        // Chart 4 (July) - TikTok gradient theme
+        new Chart(document.getElementById('chart4').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Views',
+                    data: [15000, 35000, 60000, 84000],
+                    borderColor: '#FF0050',
+                    backgroundColor: 'rgba(255, 0, 80, 0.18)',
+                    fill: true,
+                    tension: 0.38,
+                    pointBackgroundColor: '#25F4EE',
+                    pointBorderColor: '#FF0050',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: makeOptions(90000)
+        });
+    </script>
+
+    <script>
+function createChart(ctxId, dataPoints) {
+    const ctx = document.getElementById(ctxId).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Start', '', '', '', 'End'],
+            datasets: [{
+                label: 'Post Views',
+                data: dataPoints,
+                borderColor: '#00f2ea',
+                backgroundColor: 'rgba(0,242,234,0.1)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#ccc' }, grid: { color: '#222' } },
+                y: { ticks: { color: '#ccc' }, grid: { color: '#222' } }
+            }
+        }
+    });
+}
+
+createChart("chart28", [10, 8, 7, 9, 244]); // Approx shape from 28-day image
+createChart("chart60", [5, 7, 15, 8, 244]); // Approx shape from 60-day image
+</script>
+</body>
+</html>
